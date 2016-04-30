@@ -2,6 +2,7 @@ package com.nicatec.probandodb;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -26,6 +27,7 @@ public class DBHelper extends SQLiteOpenHelper {
 	
 	private  DBHelper(String databaseName, Context context) {
 		super(context, databaseName, null, DATABASE_VERSION);
+		//createDB(getDBConnection());
 	}
 
 	public static void configure(final String databaseName, final Context context) {
@@ -57,12 +59,24 @@ public class DBHelper extends SQLiteOpenHelper {
 		// if API LEVEL > 16, use this
 		// db.setForeignKeyConstraintsEnabled(true);
 	}
-	
+
+
+
+
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		createDB(db);
 	}
 
+	private SQLiteDatabase getDBConnection() {
+		SQLiteDatabase dbConnection;
+		try {
+			dbConnection = this.getWritableDatabase();
+		} catch (SQLiteException ex) {
+			dbConnection = this.getReadableDatabase();
+		}
+		return dbConnection;
+	}
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		switch (oldVersion) {

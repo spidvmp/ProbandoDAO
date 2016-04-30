@@ -11,5 +11,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         DBHelper.configure(DBConstants.TABLE_TWEETS,getApplicationContext());
+
+        DBHelper d = DBHelper.getInstance();
+
+        TweetDAO tweetDAO = new TweetDAO();
+
+        TweetMessage m = new TweetMessage(0,"Hola, esto es un tweet");
+        tweetDAO.insert(m);
+
     }
 }
